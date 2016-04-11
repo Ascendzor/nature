@@ -9,10 +9,7 @@ document.body.appendChild( renderer.domElement );
 addTriangleToScene(scene);
 
 function render() {
-  setTimeout(function() {
-    requestAnimationFrame(render);
-  }, 100);
   renderer.render( scene, camera );
+  requestAnimationFrame(render);
 }
-
-render();
+requestAnimationFrame(render);

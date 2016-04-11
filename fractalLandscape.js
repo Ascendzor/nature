@@ -9,7 +9,7 @@ var getTriangleMesh = function(triangle) {
 	return new THREE.Mesh(newGeom, new THREE.MeshNormalMaterial({wireframe: true}) );
 }
 
-var allPoints = {};
+var allPoints = [];
 var addTriangleToScene = function(scene) {
 	var currentTriangles = [];
 	var startTriangle = {
@@ -17,9 +17,12 @@ var addTriangleToScene = function(scene) {
 		position1: new THREE.Vector3(100,0,0),
 		position2: new THREE.Vector3(0,0,-100)
 	}
-	allPoints['x' + 0 + 'z:' + 0] = 0
-	allPoints['x' + 100 + 'z:' + 0] = 0
-	allPoints['x' + 0 + 'z:' + -100] = 0
+	allPoints[0] = []
+	allPoints[0][0] = 0
+	allPoints[100] = []
+	allPoints[100][0] = 0
+	allPoints[0]
+	allPoints[0][-100] = 0
 	currentTriangles.push(startTriangle);
 
 	var startMesh = getTriangleMesh(currentTriangles[0]);

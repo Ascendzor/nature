@@ -14,17 +14,16 @@ var calculateNextTriangles = function(triangle, allPoints) {
 	var distanceBetweenPoints = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) );
 	if(Math.random() > 0.5) distanceBetweenPoints = -distanceBetweenPoints;
 
-	if (typeof(allPoints['x' + inbetween0and1.x + 'z:' + inbetween0and1.z]) === "undefined")
-		allPoints['x' + inbetween0and1.x + 'z:' + inbetween0and1.z] = inbetween0and1.y + Math.random() * distanceBetweenPoints / 5;
-	inbetween0and1.y = allPoints['x' + inbetween0and1.x + 'z:' + inbetween0and1.z]
-
-	if (typeof(allPoints['x' + inbetween0and2.x + 'z:' + inbetween0and2.z]) === "undefined")
-		allPoints['x' + inbetween0and2.x + 'z:' + inbetween0and2.z] = inbetween0and2.y + Math.random() * distanceBetweenPoints / 5;
-	inbetween0and2.y = allPoints['x' + inbetween0and2.x + 'z:' + inbetween0and2.z]
-
-	if (typeof(allPoints['x' + inbetween1and2.x + 'z:' + inbetween1and2.z]) === "undefined")
-		allPoints['x' + inbetween1and2.x + 'z:' + inbetween1and2.z] = inbetween1and2.y + Math.random() * distanceBetweenPoints / 5;
-	inbetween1and2.y = allPoints['x' + inbetween1and2.x + 'z:' + inbetween1and2.z]
+	var thingy = function(x, y, z) {
+		if (typeof(allPoints[x]) === 'undefined')
+			allPoints[x] = []
+		if (typeof(allPoints[x][z]) === 'undefined')
+			allPoints[x][z] = y + Math.random() * distanceBetweenPoints / 5;
+		return allPoints[x][z];
+	}
+	inbetween0and1.y = thingy(inbetween0and1.x, inbetween0and1.y, inbetween0and1.z);
+	inbetween0and2.y = thingy(inbetween0and2.x, inbetween0and2.y, inbetween0and2.z);
+	inbetween1and2.y = thingy(inbetween1and2.x, inbetween1and2.y, inbetween1and2.z);
 
 	var newTriangles = [];
 	var newTriangle0 = {
