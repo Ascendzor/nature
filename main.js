@@ -7,6 +7,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild( renderer.domElement );
 
 addTriangleToScene(scene);
-console.log(scene);
 
-function render() { requestAnimationFrame( render ); renderer.render( scene, camera ); } render();
+function render() {
+  setTimeout(function() {
+    requestAnimationFrame(render);
+  }, 100);
+  renderer.render( scene, camera );
+}
+
+render();

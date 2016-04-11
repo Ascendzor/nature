@@ -1,3 +1,4 @@
+var generations = 7;
 var getTriangleMesh = function(triangle) {
 	var newGeom = new THREE.Geometry();
 	newGeom.vertices.push(triangle.position0);
@@ -8,6 +9,7 @@ var getTriangleMesh = function(triangle) {
 	return new THREE.Mesh(newGeom, new THREE.MeshNormalMaterial({wireframe: true}) );
 }
 
+var allPoints = {};
 var addTriangleToScene = function(scene) {
 	var currentTriangles = [];
 	var startTriangle = {
@@ -15,32 +17,33 @@ var addTriangleToScene = function(scene) {
 		position1: new THREE.Vector3(100,0,0),
 		position2: new THREE.Vector3(0,0,-100)
 	}
+	allPoints['x' + 0 + 'z:' + 0] = 0
+	allPoints['x' + 100 + 'z:' + 0] = 0
+	allPoints['x' + 0 + 'z:' + -100] = 0
 	currentTriangles.push(startTriangle);
-	
+
 	var startMesh = getTriangleMesh(currentTriangles[0]);
 	scene.add(startMesh);
-	
-	var generations = 7;
+
 	var intervalHandle = setInterval(function(){
 		var newSetOfTriangles = [];
 		while(scene.children.length > 0) {
 			scene.remove(scene.children[scene.children.length-1]);
 		}
-		
+
 		currentTriangles.forEach(function(triangle) {
-			
-			var triangles = calculateNextTriangles(triangle);
-			console.log(triangles);
+
+			var triangles = calculateNextTriangles(triangle, allPoints);
 			triangles.forEach(function(triangle) {
 				var mesh = getTriangleMesh(triangle);
 				scene.add(mesh);
 				newSetOfTriangles.push(triangle);
 			});
 		});
-		
+
 		currentTriangles = newSetOfTriangles;
-		
+
 		generations--;
 		if(generations == 0) clearInterval(intervalHandle);
-	}, 1000);
+	}, 2000);
 };
