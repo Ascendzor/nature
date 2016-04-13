@@ -1,4 +1,4 @@
-var generations = 10;
+var generations = 8;
 
 clearScene = function(scene) {
 	while(scene.children.length > 0) {
@@ -42,7 +42,7 @@ var getTheOneMesh = function(vertices, indices) {
 		x++
 	}
 	geometry.computeFaceNormals();
-	return new THREE.Mesh(geometry, new THREE.MeshNormalMaterial() );
+	return new THREE.Mesh(geometry, new THREE.MeshNormalMaterial({wireframe: true}) );
 }
 
 var addTriangleToScene = function(scene) {
