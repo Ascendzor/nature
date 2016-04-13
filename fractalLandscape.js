@@ -1,4 +1,4 @@
-var generations = 8;
+var generations = 7;
 
 clearScene = function(scene) {
 	while(scene.children.length > 0) {
