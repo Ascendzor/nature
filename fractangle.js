@@ -1,4 +1,4 @@
-var calculateNextTriangles = function(triangle, vertices) {
+var calculateNextTriangles = function(triangle, vertices, performantVertices) {
 
 	var p0 = triangle.position0;
 	var p1 = triangle.position1;
@@ -16,15 +16,16 @@ var calculateNextTriangles = function(triangle, vertices) {
 	if(Math.random() > 0.5) distanceBetweenPoints = -distanceBetweenPoints;
 
 	var thingy = function(x, y, z) {
-		var existingVertex = _.find(vertices, function(vertex) {
-			return (vertex.x == x) && (vertex.z == z)
-		})
-		if(typeof(existingVertex) == 'undefined') {
+		existingY = performantVertices[z + (x * (2^triangle.generation+1-x)/2)]
+		console.log(existingY)
+		if(typeof(existingY) == 'undefined') {
 			y = y + Math.random() * distanceBetweenPoints / 5;
+			performantVertices[z + (x * (2^triangle.generation+1-x)/2)] = y
 			vertices.push({x: x, y: y, z: z})
 			return y
 		} else {
-			return existingVertex.y
+			console.log('wasnt undefined')
+			return existingY
 		}
 
 	}
@@ -36,22 +37,26 @@ var calculateNextTriangles = function(triangle, vertices) {
 	var newTriangle0 = {
 		position0: p0,
 		position1: inbetween0and1,
-		position2: inbetween0and2
+		position2: inbetween0and2,
+		generation: triangle.generation+1
 	}
 	var newTriangle1 = {
 		position0: inbetween0and1,
 		position1: p1,
-		position2: inbetween1and2
+		position2: inbetween1and2,
+		generation: triangle.generation+1
 	}
 	var newTriangle2 = {
 		position0: inbetween1and2,
 		position1: p2,
-		position2: inbetween0and2
+		position2: inbetween0and2,
+		generation: triangle.generation+1
 	}
 	var newTriangle3 = {
 		position0: inbetween0and1,
 		position1: inbetween1and2,
-		position2: inbetween0and2
+		position2: inbetween0and2,
+		generation: triangle.generation+1
 	}
 	newTriangles.push(newTriangle0);
 	newTriangles.push(newTriangle1);
