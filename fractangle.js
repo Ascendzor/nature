@@ -1,11 +1,12 @@
-var calculateNextTriangles = function(triangle, allPoints) {
+var calculateNextTriangles = function(triangle, vertices) {
+
 	var p0 = triangle.position0;
 	var p1 = triangle.position1;
 	var p2 = triangle.position2;
 
-	var inbetween0and1 = new THREE.Vector3((triangle.position0.x + triangle.position1.x)/2, (triangle.position0.y + triangle.position1.y)/2, (triangle.position0.z + triangle.position1.z)/2);
-	var inbetween0and2 = new THREE.Vector3((triangle.position0.x + triangle.position2.x)/2, (triangle.position0.y + triangle.position2.y)/2, (triangle.position0.z + triangle.position2.z)/2);
-	var inbetween1and2 = new THREE.Vector3((triangle.position1.x + triangle.position2.x)/2, (triangle.position1.y + triangle.position2.y)/2, (triangle.position1.z + triangle.position2.z)/2);
+	var inbetween0and1 = {x: (triangle.position0.x + triangle.position1.x)/2, y: (triangle.position0.y + triangle.position1.y)/2, z: (triangle.position0.z + triangle.position1.z)/2};
+	var inbetween0and2 = {x: (triangle.position0.x + triangle.position2.x)/2, y: (triangle.position0.y + triangle.position2.y)/2, z: (triangle.position0.z + triangle.position2.z)/2};
+	var inbetween1and2 = {x: (triangle.position1.x + triangle.position2.x)/2, y: (triangle.position1.y + triangle.position2.y)/2, z: (triangle.position1.z + triangle.position2.z)/2};
 	p0.y = p0.y;
 	p1.y = p1.y;
 	p2.y = p2.y;
@@ -15,11 +16,17 @@ var calculateNextTriangles = function(triangle, allPoints) {
 	if(Math.random() > 0.5) distanceBetweenPoints = -distanceBetweenPoints;
 
 	var thingy = function(x, y, z) {
-		if (typeof(allPoints[x]) === 'undefined')
-			allPoints[x] = []
-		if (typeof(allPoints[x][z]) === 'undefined')
-			allPoints[x][z] = y + Math.random() * distanceBetweenPoints / 5;
-		return allPoints[x][z];
+		var existingVertex = _.find(vertices, function(vertex) {
+			return (vertex.x == x) && (vertex.z == z)
+		})
+		if(typeof(existingVertex) == 'undefined') {
+			y = y + Math.random() * distanceBetweenPoints / 5;
+			vertices.push({x: x, y: y, z: z})
+			return y
+		} else {
+			return existingVertex.y
+		}
+
 	}
 	inbetween0and1.y = thingy(inbetween0and1.x, inbetween0and1.y, inbetween0and1.z);
 	inbetween0and2.y = thingy(inbetween0and2.x, inbetween0and2.y, inbetween0and2.z);
