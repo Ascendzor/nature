@@ -1,4 +1,4 @@
-var generations = 4;
+var generations = 8;
 
 clearScene = function(scene) {
 	while(scene.children.length > 0) {
@@ -17,20 +17,14 @@ var getNewTriangles = function(triangles, vertices, performantVertices) {
 	return newTriangles
 }
 
-var updateIndices = function(vertices, triangles) {
+var updateIndices = function(vertices, triangles, performantVertices) {
 	indices = [];
 	triangles.forEach(function(triangle) {
 		Object.keys(triangle).forEach(function(key) {
 			if(key == 'generation') return
-			index = _.findKey(vertices, function(vertex) {
-				var triangleVertex = {
-					x: triangle[key].x,
-					y: triangle[key].y,
-					z: triangle[key].z
-				}
-				return _.isEqual(vertex, triangleVertex)
-			})
-			console.log(index)
+			var x = triangle[key].x
+			var z = triangle[key].z
+			var index = performantVertices[x][z].index
 			indices.push(index)
 		})
 	})
@@ -67,6 +61,25 @@ var addTriangleToScene = function(scene) {
 	vertices.push({x: 0, y: 0, z: -100})
 
 	var performantVertices = []
+	performantVertices[0] = []
+	performantVertices[0][0] = {
+		y: 0,
+		index: 0
+	}
+	performantVertices[0] = []
+	performantVertices[0][0] = {
+		y: 0,
+		index: 0
+	}
+	performantVertices[100] = []
+	performantVertices[100][0] = {
+		y: 0,
+		index: 1
+	}
+	performantVertices[0][-100] = {
+		y: 0,
+		index: 2
+	}
 
 	var indices = [0, 1, 2]
 
@@ -75,12 +88,21 @@ var addTriangleToScene = function(scene) {
 
 	var intervalHandle = setInterval(function(){
 		clearScene(scene)
+		var beforeTriangles = +(new Date())
 		triangles = getNewTriangles(triangles, vertices, performantVertices)
-		console.log(vertices)
-		indices = updateIndices(vertices, triangles)
-		console.log(indices)
+		var afterTriangles = +(new Date())
+		indices = updateIndices(vertices, triangles, performantVertices)
+		var afterIndices = +(new Date())
 		mesh = getTheOneMesh(vertices, indices)
+		var afterMesh = +(new Date())
 		scene.add(mesh)
+
+		var secondsTrianglesTook = (afterTriangles - beforeTriangles)
+		var secondsIndicesTook = (afterIndices - afterTriangles)
+		var secondsMeshTook = (afterMesh - afterIndices)
+		console.log(secondsTrianglesTook)
+		console.log(secondsIndicesTook)
+		console.log(secondsMeshTook)
 
 		generations--;
 		if(generations == 0) clearInterval(intervalHandle);

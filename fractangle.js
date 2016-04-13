@@ -16,15 +16,22 @@ var calculateNextTriangles = function(triangle, vertices, performantVertices) {
 	if(Math.random() > 0.5) distanceBetweenPoints = -distanceBetweenPoints;
 
 	var thingy = function(x, y, z) {
-		existingY = performantVertices[z + (x * (2^triangle.generation+1-x)/2)]
-		console.log(existingY)
+		var existingY = undefined
+		if(typeof(performantVertices[x]) == 'undefined') {
+			performantVertices[x] = []
+		}
+		if(typeof(performantVertices[x][z]) == 'undefined') {
+			performantVertices[x][z] = {}
+		}else{
+			existingY = performantVertices[x][z].y
+		}
 		if(typeof(existingY) == 'undefined') {
 			y = y + Math.random() * distanceBetweenPoints / 5;
-			performantVertices[z + (x * (2^triangle.generation+1-x)/2)] = y
 			vertices.push({x: x, y: y, z: z})
+			performantVertices[x][z].y = y
+			performantVertices[x][z].index = vertices.length-1
 			return y
 		} else {
-			console.log('wasnt undefined')
 			return existingY
 		}
 
