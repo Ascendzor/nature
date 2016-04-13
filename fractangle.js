@@ -27,6 +27,7 @@ var calculateNextTriangles = function(triangle, vertices, performantVertices) {
 		}
 		if(typeof(existingY) == 'undefined') {
 			y = y + Math.random() * distanceBetweenPoints / 10;
+			y += Math.sin(x) / 2.5
 			vertices.push({x: x, y: y, z: z})
 			performantVertices[x][z].y = y
 			performantVertices[x][z].index = vertices.length-1
